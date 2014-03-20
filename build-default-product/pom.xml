@@ -38,4 +38,26 @@
     	  <module>../documento.service.subsystem</module>
 		  <module>../documento.service.subsystem.web</module>
     </modules>
+    <dependencies>
+        <dependency>
+            <groupId>co.edu.uniandes.csw</groupId>
+            <artifactId>factura.master.service.subsystem</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>co.edu.uniandes.csw</groupId>
+            <artifactId>inventario.master.service.subsystem</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>co.edu.uniandes.csw</groupId>
+            <artifactId>producto.master.service.subsystem</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>co.edu.uniandes.csw</groupId>
+            <artifactId>productocomp.master.service.subsystem</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
 </project>
