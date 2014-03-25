@@ -5,6 +5,9 @@
     <class>co.edu.uniandes.csw.documento.persistence.entity.DocumentoEntity</class>
     <class>co.edu.uniandes.csw.producto.master.persistence.entity.ProductoDocumentoEntity</class>
     <class>co.edu.uniandes.csw.producto.persistence.entity.ProductoEntity</class>
+    <class>co.edu.uniandes.csw.item.persistence.entity.ItemEntity</class>
+    <class>co.edu.uniandes.csw.producto.master.persistence.entity.ProductoItemEntity</class>
+  
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <shared-cache-mode>NONE</shared-cache-mode>
     <properties>

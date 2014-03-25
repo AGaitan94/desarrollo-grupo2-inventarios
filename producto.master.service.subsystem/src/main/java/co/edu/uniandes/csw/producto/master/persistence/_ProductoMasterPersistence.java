@@ -2,9 +2,12 @@ package co.edu.uniandes.csw.producto.master.persistence;
 import co.edu.uniandes.csw.documento.logic.dto.DocumentoDTO;
 import co.edu.uniandes.csw.producto.master.persistence.entity.ProductoDocumentoEntity;
 import co.edu.uniandes.csw.documento.persistence.converter.DocumentoConverter;
+import co.edu.uniandes.csw.item.logic.dto.ItemDTO;
+import co.edu.uniandes.csw.item.persistence.converter.ItemConverter;
 import co.edu.uniandes.csw.producto.logic.dto.ProductoDTO;
 import co.edu.uniandes.csw.producto.master.logic.dto.ProductoMasterDTO;
 import co.edu.uniandes.csw.producto.master.persistence.api._IProductoMasterPersistence;
+import co.edu.uniandes.csw.producto.master.persistence.entity.ProductoItemEntity;
 import co.edu.uniandes.csw.producto.persistence.api.IProductoPersistence;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,10 +29,16 @@ public class _ProductoMasterPersistence implements _IProductoMasterPersistence {
         ProductoDTO producto = productoPersistence.getProducto(productoId);
         productoMasterDTO.setProductoEntity(producto);
         productoMasterDTO.setListDocumento(getDocumentoListForProducto(productoId));
+        productoMasterDTO.setListItem(getItemListForProducto(productoId));
         return productoMasterDTO;
     }
 
     public ProductoDocumentoEntity createProductoDocumento(ProductoDocumentoEntity entity) {
+        entityManager.persist(entity);
+        return entity;
+    }
+    
+    public ProductoItemEntity createProductoItem(ProductoItemEntity entity){
         entityManager.persist(entity);
         return entity;
     }
@@ -38,6 +47,13 @@ public class _ProductoMasterPersistence implements _IProductoMasterPersistence {
         Query q = entityManager.createNamedQuery("ProductoDocumentoEntity.deleteProductoDocumento");
         q.setParameter("productoId", productoId);
         q.setParameter("documentoId", documentoId);
+        q.executeUpdate();
+    }
+    
+    public void deleteProductoItem(Long productoId, Long itemId){
+        Query q = entityManager.createNamedQuery("ProductoItemEntity.deleteProductoItem");
+        q.setParameter("productoID", productoId);
+        q.setParameter("itemID", itemId);
         q.executeUpdate();
     }
 
@@ -51,6 +67,20 @@ public class _ProductoMasterPersistence implements _IProductoMasterPersistence {
                 entityManager.refresh(productoDocumentoEntity);
             }
             resp.add(DocumentoConverter.entity2PersistenceDTO(productoDocumentoEntity.getDocumentoEntity()));
+        }
+        return resp;
+    }
+    
+    public List<ItemDTO> getItemListForProducto(Long productoId){
+        ArrayList <ItemDTO> resp = new ArrayList<ItemDTO>();
+        Query q = entityManager.createNamedQuery("ProductoItemEntity.getItemListForProducto");
+        q.setParameter("productoId", productoId);
+        List<ProductoItemEntity> qResult = q.getResultList();
+        for(ProductoItemEntity productoItemEntity : qResult) {
+            if(productoItemEntity.getItemEntity()==null){
+                entityManager.refresh(productoItemEntity);
+            }
+               resp.add(ItemConverter.entity2PersistenceDTO(productoItemEntity.getItemEntity()));
         }
         return resp;
     }

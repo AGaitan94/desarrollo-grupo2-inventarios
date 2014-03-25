@@ -1,8 +1,8 @@
 define(['controller/selectionController', 'model/cacheModel', 'model/productoMasterModel', 'component/_CRUDComponent', 'controller/tabController', 'component/productoComponent',
- 'component/documentoComponent'
+ 'component/documentoComponent', 'component/itemComponent'
  
  ],function(SelectionController, CacheModel, ProductoMasterModel, CRUDComponent, TabController, ProductoComponent,
- DocumentoComponent
+ DocumentoComponent, ItemComponent
  ) {
     App.Component.ProductoMasterComponent = App.Component.BasicComponent.extend({
         initialize: function() {
@@ -50,6 +50,26 @@ define(['controller/selectionController', 'model/cacheModel', 'model/productoMas
                     var m = documentoModels.deletedModels[i];
                     self.model.get('deleteDocumento').push(m.toJSON());
                 }
+                var itemModels = self.itemComponent.componentController.itemModelList;
+                self.model.set('listItem', []);
+                self.model.set('createItem', []);
+                self.model.set('updateItem', []);
+                self.model.set('deleteItem', []);
+                for (var i = 0; i < itemModels.models.length; i++) {
+                    var m = itemModels.models[i];
+                    var modelCopy = m.clone();
+                    if (m.isCreated()) {
+                        //set the id to null
+                        modelCopy.unset('id');
+                        self.model.get('createItem').push(modelCopy.toJSON());
+                    } else if (m.isUpdated()) {
+                        self.model.get('updateItem').push(modelCopy.toJSON());
+                    }
+                }
+                for (var i = 0; i < itemModels.deletedModels.length; i++) {
+                    var m = itemModels.deletedModels[i];
+                    self.model.get('deleteItem').push(m.toJSON());
+                }
                 self.model.save({}, {
                     success: function() {
                         uComponent.componentController.list();
@@ -66,6 +86,8 @@ define(['controller/selectionController', 'model/cacheModel', 'model/productoMas
                     {
                         tabs: [
                             {label: "Documento", name: "documento", enable: true},
+                            ,
+                            {label: "Item", name: "item", enable: true},
                         ]
                     }
             );
@@ -86,9 +108,20 @@ define(['controller/selectionController', 'model/cacheModel', 'model/productoMas
                     Backbone.on(self.documentoComponent.componentId + '-post-documento-create', function(params) {
                         params.view.currentDocumentoModel.setCacheList(params.view.documentoModelList);
                     });
+                                        self.itemComponent = new ItemComponent();
+                    self.itemModels = App.Utils.convertToModel(App.Utils.createCacheModel(App.Model.ItemModel), self.model.get('listItem'));
+                    self.itemComponent.initialize({
+                        modelClass: App.Utils.createCacheModel(App.Model.ItemModel),
+                        listModelClass: App.Utils.createCacheList(App.Model.ItemModel, App.Model.ItemList, self.itemModels)
+                    });
+                    self.itemComponent.render(self.tabs.getTabHtmlId('item'));
+                    Backbone.on(self.itemComponent.componentId + '-post-item-create', function(params) {
+                        params.view.currentItemModel.setCacheList(params.view.itemModelList);
+                    });
                     self.documentoToolbarModel = self.documentoComponent.toolbarModel.set(App.Utils.Constans.referenceToolbarConfiguration);
                     self.documentoComponent.setToolbarModel(self.documentoToolbarModel);                    
-                	
+                    self.itemToolbarModel = self.itemComponent.toolbarModel.set(App.Utils.Constans.referenceToolbarConfiguration);
+                    self.itemComponent.setToolbarModel(self.itemToolbarModel);                    
                      
                 
                     $('#tabs').show();
