@@ -11,5 +11,7 @@ public interface IProductoLogicService extends _IProductoLogicService {
      * @return true if the product is about to expire. False if not.
      */
     public boolean isAboutToExpire(ProductoDTO producto);
+    
+    public boolean reachedMinCap(ProductoDTO producto);
 
 }

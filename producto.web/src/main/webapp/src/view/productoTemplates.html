@@ -16,7 +16,11 @@
     </thead>
     <tbody>
     <% _.each(productos, function(producto) { %>
-    <tr>
+    <% if (producto.getDisplay('cantidadDisp') <= producto.getDisplay('cantidadMin')) { %>
+        <tr id="existenciasBajas" class="danger" data-toggle="tooltip" data-placement="right" title="Existencias bajas!">
+    <% } else { %>
+        <tr>
+    <% } %>
 		<td><%= htmlEncode(producto.getDisplay('name')) %></td>
 		<td><%= htmlEncode(producto.getDisplay('cantidadDisp')) %></td>
 		<td><%= htmlEncode(producto.getDisplay('canitdadEnProc')) %></td>
@@ -29,11 +33,15 @@
     <a onclick="Backbone.trigger('<%= componentId %>-producto-edit',{id:<%= producto.id %>}); return false" >Edit</a> |
 	<% } %> 
 	<% if(showDelete) {%>
-    <a onclick="Backbone.trigger('<%= componentId %>-producto-delete',{id:<%= producto.id %>}); return false" >Delete</a> 
-	<% } %>    
+    <a onclick="Backbone.trigger('<%= componentId %>-producto-delete',{id:<%= producto.id %>}); return false" >Delete</a> |
+	<% } %> 
+        <% if (producto.getDisplay('cantidadDisp') <= producto.getDisplay('cantidadMin')) { %>
+    <a onclick="">Suplir</a>
+        <% } %>
 	</td>
     </tr>
     <% }); %>
+       <% $(function ()  { $("#existenciasBajas").tooltip();      }); %>
     </tbody>
     </table>
     </div>

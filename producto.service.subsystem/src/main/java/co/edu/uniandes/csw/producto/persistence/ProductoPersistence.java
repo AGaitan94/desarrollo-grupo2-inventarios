@@ -19,4 +19,9 @@ public class ProductoPersistence extends _ProductoPersistence  implements IProdu
         //yet to solve. by Jessie
     }
 
+    public boolean reachedMinCap(ProductoDTO producto) 
+    {
+        return producto.getCantidadDisp() <= producto.getCantidadMin();
+    }
+
 }

@@ -31,5 +31,9 @@ public class ProductoMockLogicService extends _ProductoMockLogicService implemen
       else
           return false;
     }
+
+    public boolean reachedMinCap(ProductoDTO producto) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 	
 }

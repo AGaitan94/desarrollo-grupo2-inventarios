@@ -35,4 +35,9 @@ public class ProductoLogicService extends _ProductoLogicService implements IProd
         
     }
 
+    public boolean reachedMinCap(ProductoDTO producto) 
+    {
+        return persistance.reachedMinCap(producto);
+    }
+
 }
